@@ -50,10 +50,10 @@ class Brain(object):
             count += 1
             points.append(pt)
 
-        if count >= 1:
-            cv2.imshow('Detected', img)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+        #if count >= 1:
+        #    cv2.imshow('Detected', img)
+        #    cv2.waitKey(0)
+        #    cv2.destroyAllWindows()
 
         return count, points, best_fit, min_val
 
