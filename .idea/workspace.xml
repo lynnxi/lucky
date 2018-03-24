@@ -57,14 +57,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Brain.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Brain.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/Brain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="326" column="38" lean-forward="false" selection-start-line="326" selection-start-column="38" selection-end-line="326" selection-end-column="38" />
+            <state relative-caret-position="2368">
+              <caret line="125" column="24" lean-forward="false" selection-start-line="125" selection-start-column="19" selection-end-line="125" selection-end-column="24" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Holdem.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/Holdem.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="58" column="64" lean-forward="false" selection-start-line="58" selection-start-column="46" selection-end-line="58" selection-end-column="64" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -81,6 +91,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>len</find>
+      <find>appen</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -95,12 +106,13 @@
         <option value="$PROJECT_DIR$/core/Main.py" />
         <option value="$PROJECT_DIR$/test/test.py" />
         <option value="$PROJECT_DIR$/core/Brain.py" />
+        <option value="$PROJECT_DIR$/core/Holdem.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2185" />
-    <option name="y" value="60" />
+    <option name="x" value="2275" />
+    <option name="y" value="29" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -229,7 +241,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2185" y="60" width="1400" height="1000" extended-state="0" />
+    <frame x="2275" y="29" width="1400" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -293,16 +305,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/Main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/Eyes.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
@@ -313,13 +315,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/Brain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="326" column="38" lean-forward="false" selection-start-line="326" selection-start-column="38" selection-end-line="326" selection-end-column="38" />
+        <state relative-caret-position="2368">
+          <caret line="125" column="24" lean-forward="false" selection-start-line="125" selection-start-column="19" selection-end-line="125" selection-end-column="24" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/Holdem.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="58" column="64" lean-forward="false" selection-start-line="58" selection-start-column="46" selection-end-line="58" selection-end-column="64" />
+          <folding />
         </state>
       </provider>
     </entry>
