@@ -29,7 +29,8 @@ class Holdem(object):
 
     def make_decision_tree(self, decision_node):
         if decision_node['is_leaf'] :
-            return
+            return decision_node
+
         if decision_node['need_to_call'] < decision_node['my_chip_stacks']:
             new_role = decision_node['role'] % 2
             node_bet = self.make_new_action_node(new_role,
@@ -67,8 +68,9 @@ class Holdem(object):
                                                  decision_node['pot'])
                 decision_node['call'] = self.make_decision_tree(node)
 
+        decision_node['fold'] = self.make_leaf_node()
 
-        decision_tree['fold'] = self.make_leaf_node()
+        return decision_node
 
 
     def make_leaf_node(self):
