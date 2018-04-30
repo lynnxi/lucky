@@ -22,6 +22,9 @@ class Holdem(object):
             'bet' : {},
             'call' : {},
             'fold' : {},
+
+
+            
             'role' : OOP,
             'stacks' + OOP : 0,
             'stacks' + IP : 0,

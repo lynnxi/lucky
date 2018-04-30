@@ -3,9 +3,12 @@ import numpy as np
 import os
 import time
 import pytesseract
+import random
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\tesseract'
 from matplotlib import pyplot as plt
 from PIL import Image, ImageFilter, ImageGrab
+
+from Node import Node
 
 
 PREFLOP = 1
@@ -310,6 +313,24 @@ class Brain(object):
         # cv2.destroyAllWindows()
 
         self.pot = pytesseract.image_to_string(img);
+
+
+    def get_action_from_strategy(self, strategy):
+        r = random.random()
+        if r < strategy['bet'] :
+            action = 'bet'
+        elif r < strategy['bet'] + strategy['call'] and r >= strategy['bet'] :
+            action = 'call'
+        elif r < strategy['bet'] + strategy['call'] + strategy['fold'] and r >= strategy['bet'] + strategy['call'] :
+            action = 'call'
+
+        return action
+
+    def do_action(self, info):
+        node = Node.find_node(info)
+        strategy = node.get_strategy(info['mycard'])
+        action = self.get_action_from_strategy(strategy)
+
 
 
     def start(self, q):
