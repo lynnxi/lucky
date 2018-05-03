@@ -81,9 +81,9 @@ class Brain(object):
             },
             'pot': [311, 263, 411, 307],
             'button': {
-                '1/3' :[],
-                '1/2' :[],
-                '2/3' :[],
+                '0.3' :[],
+                '0.5' :[],
+                '0.7' :[],
                 '1' : [],
                 '1.5': [],
                 'allin': [],
@@ -337,23 +337,23 @@ class Brain(object):
 
 
     def get_action_from_strategy(self, strategy):
-        r = random.random()
-        if r < strategy['bet'] :
-            action = 'bet'
-        elif r < strategy['bet'] + strategy['call'] and r >= strategy['bet'] :
-            action = 'call'
-        elif r < strategy['bet'] + strategy['call'] + strategy['fold'] and r >= strategy['bet'] + strategy['call'] :
-            action = 'call'
+        #config = {'0.3' : 1, '0.5' : 2, '0.7' : 3, '1' : 4, '1.5' : 5, 'allin' : 6, 'check' : 7, 'call' : 8, 'fold' : 9}
 
-        return action
+        seeds = []
+        for key, value in strategy.items():
+            count = value * 10000
+            for i in range(count):
+                seeds.append(key)
+
+        r = random.randint(0, 9999)
+        return seeds[r]
 
     def do_action(self, info):
         node = Node.find_node(info['npid'], info['oacttion'])
         strategy = node.get_strategy(info['mycard'])
         action = self.get_action_from_strategy(strategy)
-        self.node = next_node()
 
-
+        print action
 
 
 

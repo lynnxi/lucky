@@ -25,7 +25,16 @@ class Node(object):
         suites = "CDHS"
         for x in values:
             for y in suites:
-                self.strategy[x + y] = {'bet' : 1, 'call' : 1, 'fold' : 1}
+                self.strategy[x + y] = {
+                    '0.3' : 0.125,
+                    '0.5': 0.125,
+                    '0.7': 0.125,
+                    '1': 0.125,
+                    '1.5': 0.125,
+                    'allin': 0.125,
+                    'check/call': 0.125,
+                    'fold' : 0.125,
+                }
 
     def get_strategy(self, card):
         return self.strategy[card]
