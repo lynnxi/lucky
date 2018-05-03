@@ -8,8 +8,6 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files (x86)\Tesseract-OCR\t
 from matplotlib import pyplot as plt
 from PIL import Image, ImageFilter, ImageGrab
 
-from Node import Node
-
 
 PREFLOP = 1
 FLOP = 2
@@ -46,14 +44,16 @@ round_card_no = {
     RIVER: 5,
 }
 
+PATH_PIC = 'pics'
+
 class Brain(object):
     def __init__(self):
-        self.poker_identify = '../pics/pokermaster_identify.png'
-        self.btn_pic = '../pics/BTN.png'
-        self.bet_pic = '../pics/BET.png'
-        self.call_pic = '../pics/CALL.png'
-        self.fold_pic = '../pics/FOLD.png'
-        self.check_pic = '../pics/CHECK.png'
+        self.poker_identify = PATH_PIC + '/pokermaster_identify.png'
+        self.btn_pic =  PATH_PIC + '/BTN.png'
+        self.bet_pic = PATH_PIC + '/BET.png'
+        self.call_pic = PATH_PIC + '/CALL.png'
+        self.fold_pic = PATH_PIC + '/FOLD.png'
+        self.check_pic = PATH_PIC + '/CHECK.png'
         self.is_find_table = False
         self.players_seq = [S6, S12]
         self.action_on = S12
@@ -79,7 +79,18 @@ class Brain(object):
                     'bet': [110, 90, 220, 120],
                 },
             },
-            'pot': [311, 263, 411, 307]
+            'pot': [311, 263, 411, 307],
+            'button': {
+                '1/3' :[],
+                '1/2' :[],
+                '2/3' :[],
+                '1' : [],
+                '1.5': [],
+                'allin': [],
+                'check': [],
+                'fold': [],
+                'call': []
+            }
         }
         values = "23456789TJQKA"
         suites = "CDHS"
@@ -87,7 +98,7 @@ class Brain(object):
         self.card_images = {}
         for x in values:
             for y in suites:
-                name = "../pics/" + x + y + ".png"
+                name = PATH_PIC + '/' + x + y + '.png'
                 if os.path.exists(name):
                     self.img[x + y.upper()] = Image.open(name)
                     self.card_images[x + y.upper()] = cv2.cvtColor(np.array(self.img[x + y.upper()]), cv2.COLOR_BGR2RGB)
@@ -95,11 +106,21 @@ class Brain(object):
                     print("Card template File not found: " + str(x) + str(y) + ".png")
 
         self.action_images = {
-            BET: cv2.cvtColor(np.array(Image.open('../pics/BET.png')), cv2.COLOR_BGR2RGB),
-            CALL: cv2.cvtColor(np.array(Image.open('../pics/CALL.png')), cv2.COLOR_BGR2RGB),
-            CHECK: cv2.cvtColor(np.array(Image.open('../pics/CHECK.png')), cv2.COLOR_BGR2RGB),
-            FOLD: cv2.cvtColor(np.array(Image.open('../pics/FOLD.png')), cv2.COLOR_BGR2RGB),
+            BET: cv2.cvtColor(np.array(Image.open(PATH_PIC + '/BET.png')), cv2.COLOR_BGR2RGB),
+            CALL: cv2.cvtColor(np.array(Image.open(PATH_PIC + '/CALL.png')), cv2.COLOR_BGR2RGB),
+            CHECK: cv2.cvtColor(np.array(Image.open(PATH_PIC + '/CHECK.png')), cv2.COLOR_BGR2RGB),
+            FOLD: cv2.cvtColor(np.array(Image.open(PATH_PIC + '/FOLD.png')), cv2.COLOR_BGR2RGB),
         }
+
+        self.node = {}
+
+        self.qin = False
+        self.qout = False
+        self.hands = False
+
+
+    def set_hands(self, hands):
+        self.hands = hands
 
     def match_template(self, screenshot, template):
         _template = cv2.cvtColor(np.array(template), cv2.COLOR_BGR2GRAY)
@@ -327,16 +348,19 @@ class Brain(object):
         return action
 
     def do_action(self, info):
-        node = Node.find_node(info)
+        node = Node.find_node(info['npid'], info['oacttion'])
         strategy = node.get_strategy(info['mycard'])
         action = self.get_action_from_strategy(strategy)
+        self.node = next_node()
 
 
 
-    def start(self, q):
+
+
+    def start(self):
          i = 0
          while True:
-             s = q.get(True)
+             s = self.qin.get(True)
              # print('get a sth from eyes')
              if self.is_find_table == False :
                 if self.find_table(s) :

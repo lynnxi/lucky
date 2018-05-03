@@ -16,6 +16,8 @@ class Eyes(object):
         self.x2 = self.x + self.width
         self.y2 = self.y + self.height
 
+        self.qin = False
+
     def set_window(self):
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (self.x, self.y)
         pygame.init()
@@ -28,8 +30,8 @@ class Eyes(object):
     def take_screenshot(self):
         return ImageGrab.grab((self.x, self.y, self.x2, self.y2))
 
-    def start(self, q):
+    def start(self):
         self.set_window()
         while True:
-            q.put(self.take_screenshot())
+            self.qin.put(self.take_screenshot())
             time.sleep(1)

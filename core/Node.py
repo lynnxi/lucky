@@ -32,3 +32,6 @@ class Node(object):
 
     def find_node(info):
         return Node()
+
+    def build_node():
+        return Node()
