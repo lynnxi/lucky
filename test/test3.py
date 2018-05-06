@@ -1,3 +1,10 @@
+set1 = set(['a1', 'b2', 'c3'])
+set2 = set(['b2', 'a1', 'c3'])
+print (set1, set2)
+print (set1 == set2)
+pass
+
+
 node_r = {
     'bet': {},
     'call': {},

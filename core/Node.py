@@ -1,14 +1,13 @@
 class Node(object):
     def __init__(self):
 
-        self.id = 0
-        self.pid = 0
-        self.bet = 0
-        self.call = 0
-        self.fold = 0
+        self.id = Node.newid()
+        self.sub_nid = {}
 
+        self.event = {}
         self.data = {
             'role': OOP,
+            'btn' : '',
             'stacks' + OOP: 0,
             'stacks' + IP: 0,
             'table_cards': [],
@@ -39,8 +38,15 @@ class Node(object):
     def get_strategy(self, card):
         return self.strategy[card]
 
-    def find_node(info):
+    def save(self):
+        return
+
+    def newid():
+        return
+
+    def find_node(nid):
         return Node()
 
     def build_node():
         return Node()
+

@@ -157,12 +157,16 @@ class Brain(object):
         return count, points, best_fit, min_val
 
     def find_table(self, screenshot):
-        count, points, best_fit, min_val = self.match_template(screenshot, Image.open(self.poker_identify))
+        if self.is_find_table == False :
+            count, points, best_fit, min_val = self.match_template(screenshot, Image.open(self.poker_identify))
+            if count >= 1 :
+                self.is_find_table = True
+                print('find a table')
 
-        return count >= 1
+        return self.is_find_table
 
     def check_table_card(self, screenshot):
-        self.cards_on_table = []
+        cards_on_table = []
         table_card_position = self.position_config['table_card']
         table_card_img = screenshot.crop((table_card_position[0], table_card_position[1],
                                     table_card_position[2], table_card_position[3]))
@@ -173,7 +177,7 @@ class Brain(object):
         for key, template in self.card_images.items():
             count, points, best_fit, min_val = self.match_template(table_card_img, template)
             if count >= 1:
-                self.cards_on_table.append(key)
+                cards_on_table.append(key)
 
         # self.game_stage = PREFLOP
         #
@@ -185,6 +189,7 @@ class Brain(object):
         #     self.game_stage = TURN
         # elif len(self.cards_on_table) == 5:
         #     self.game_stage = RIVER
+        return cards_on_table
 
     def check_player_on_action(self, screenshot, player):
         position_a = self.position_config['players'][player]['a']
@@ -228,6 +233,85 @@ class Brain(object):
         return action, bet_size
 
     def check_player_status(self, screenshot):
+        players = {
+            S12 : {'name' : 's12', 'money' : 0, 'btn' : False, 'action' : None},
+            S6 : {'name' : 's6', 'money' : 0, 'btn' : False, 'action' : None},
+        }
+        player_position_s6 = self.position_config['players'][S6]['a']
+        player_position_s12 = self.position_config['players'][S12]['a']
+        player_position_s6_name = self.position_config['players'][S6]['name']
+        player_position_s12_name = self.position_config['players'][S12]['name']
+        player_position_s6_money = self.position_config['players'][S6]['money']
+        player_position_s12_money = self.position_config['players'][S12]['money']
+
+        s12_img = screenshot.crop((player_position_s12[0], player_position_s12[1],
+                                   player_position_s12[2], player_position_s12[3]))
+        s6_img = screenshot.crop((player_position_s6[0], player_position_s6[1],
+                                  player_position_s6[2], player_position_s6[3]))
+
+        s12_name = s12_img.crop((player_position_s12_name[0], player_position_s12_name[1],
+                                    player_position_s12_name[2], player_position_s12_name[3]))
+        s6_name = s6_img.crop((player_position_s6_name[0], player_position_s6_name[1],
+                                   player_position_s6_name[2], player_position_s6_name[3]))
+
+        s12_money = s12_img.crop((player_position_s12_money[0], player_position_s12_money[1],
+                                     player_position_s12_money[2], player_position_s12_money[3]))
+        s6_money = s6_img.crop((player_position_s6_money[0], player_position_s6_money[1],
+                                    player_position_s6_money[2], player_position_s6_money[3]))
+
+
+        # cv2.imshow('Detected', np.array(s12_img))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        #
+        # cv2.imshow('Detected', np.array(s6_img))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        #
+        # cv2.imshow('Detected', np.array(s12_money))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+        #
+        # cv2.imshow('Detected', np.array(s6_money))
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
+        players[S12]['name'] = 's12';
+        players[S6]['name'] = 's6';
+        players[S12]['money'] = pytesseract.image_to_string(s12_money);
+        players[S6]['money'] = pytesseract.image_to_string(s6_money);
+
+        count, points, best_fit, min_val = self.match_template(s6_img, Image.open(self.btn_pic))
+        if count >= 1:
+            players[S6]['btn'] = True
+        else:
+            count, points, best_fit, min_val = self.match_template(s12_img, Image.open(self.btn_pic))
+            if count >= 1:
+                players[S12]['btn'] = True
+
+
+        for key, template in self.action_images.items():
+            count, points, best_fit, min_val = self.match_template(s6_img, template)
+            if count >= 1:
+                if key == BET:
+                    betsize = self.check_betsize(s6_img, S6)
+                    key = key + betsize
+                players[S6]['action'] = key
+                break
+
+        for key, template in self.action_images.items():
+            count, points, best_fit, min_val = self.match_template(s12_img, template)
+            if count >= 1:
+                if key == BET:
+                    betsize = self.check_betsize(s12_img, S12)
+                    key = key + betsize
+                players[S12]['action'] = key
+                break
+
+        return players
+
+
+    def check_player_status_ob(self, screenshot):
         self.players = {S12 : {}, S6 : {}}
         player_position_s6 = self.position_config['players'][S6]['a']
         player_position_s12 = self.position_config['players'][S12]['a']
@@ -349,15 +433,94 @@ class Brain(object):
         return seeds[r]
 
     def do_action(self, info):
-        node = Node.find_node(info['npid'], info['oacttion'])
+        node = self.current_node
         strategy = node.get_strategy(info['mycard'])
         action = self.get_action_from_strategy(strategy)
 
         print action
 
+    def new_event(self, event, snapshot):
+        nid = self.current_node.sub_nid[event['eventid']]
+        if nid == None :
+            node = Node()
+            node.event = event
+            node.data = snapshot
+            nid = node.id
+            self.current_node.sub_nid[event['eventid']] = nid
+        node = Node.find_node(nid)
+        self.current_node.save()
+        self.current_node = node
 
 
     def start(self):
+        i = 0
+        while True:
+            s = self.qin.get(True)
+             # print('get a sth from eyes')
+            if self.find_table(s) == False :
+                continue
+
+            cards = self.check_table_card(s)
+            if cards != self.cards_on_table :
+                if (len(cards) == 0) :
+                    snapshot = {
+                        'table_cards' : cards,
+                        'players' : self.players,
+                        'pot' : self.pot,
+                        'round' : PREFLOP
+                    }
+                    self.new_event(Event({'desc' : 'new hand'}), snapshot)
+                elif (len(cards) == 3) :
+                    snapshot = {
+                        'table_cards' : cards,
+                        'players' : self.players,
+                        'pot' : self.pot,
+                        'round' : FLOP
+                    }
+                    self.new_event(Event({'desc' : 'flop' + set(cards)}), snapshot)
+                elif (len(cards) == 4) :
+                    snapshot = {
+                        'table_cards' : cards,
+                        'players' : self.players,
+                        'pot' : self.pot,
+                        'round' : TURN
+                    }
+                    self.new_event(Event({'desc' : 'turn' + (set(cards) ^ set[self.cards_on_table])}), snapshot)
+                elif (len(cards) == 5) :
+                    snapshot = {
+                        'table_cards' : cards,
+                        'players' : self.players,
+                        'pot' : self.pot,
+                        'round' : RIVER
+                    }
+                    self.new_event(Event({'desc' : 'river' + (set(cards) ^ set[self.cards_on_table])}), snapshot)
+
+                self.cards_on_table = cards
+
+            players = self.check_player_status(s)
+            if players[S6]['action'] != None and players[S6]['action'] != self.players[S6]['action']:
+                snapshot = {
+                    'table_cards': self.cards,
+                    'players': players,
+                    'pot': self.pot,
+                    'round': RIVER
+                }
+                self.new_event(Event({'desc' : players[S6]['action']}), snapshot)
+            if players[S12]['action'] != None and players[S12]['action'] != self.players[S12]['action']:
+                snapshot = {
+                    'table_cards': self.cards,
+                    'players': players,
+                    'pot': self.pot,
+                    'round': RIVER
+                }
+                self.new_event(Event({'desc' : players[S12]['action']}), snapshot)
+
+            self.players = players
+
+
+
+
+    def start_ob(self):
          i = 0
          while True:
              s = self.qin.get(True)
