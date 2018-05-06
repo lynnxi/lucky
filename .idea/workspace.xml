@@ -68,8 +68,8 @@
       <file leaf-file-name="Brain.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/core/Brain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="606">
-              <caret line="513" column="34" lean-forward="true" selection-start-line="513" selection-start-column="34" selection-end-line="513" selection-end-column="34" />
+            <state relative-caret-position="373">
+              <caret line="520" column="45" lean-forward="true" selection-start-line="520" selection-start-column="45" selection-end-line="520" selection-end-column="45" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -217,6 +217,11 @@
               <item name="lucky" type="b2602c69:ProjectViewProjectNode" />
               <item name="lucky" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lucky" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lucky" type="462c0819:PsiDirectoryNode" />
+              <item name="pics" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="lucky" type="b2602c69:ProjectViewProjectNode" />
@@ -548,8 +553,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/Brain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="513" column="34" lean-forward="true" selection-start-line="513" selection-start-column="34" selection-end-line="513" selection-end-column="34" />
+        <state relative-caret-position="373">
+          <caret line="520" column="45" lean-forward="true" selection-start-line="520" selection-start-column="45" selection-end-line="520" selection-end-column="45" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

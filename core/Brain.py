@@ -54,6 +54,7 @@ class Brain(object):
         self.call_pic = PATH_PIC + '/CALL.png'
         self.fold_pic = PATH_PIC + '/FOLD.png'
         self.check_pic = PATH_PIC + '/CHECK.png'
+        self.button_bet_pic = PATH_PIC + '/BUTTON_BET.png'
         self.is_find_table = False
         self.players_seq = [S6, S12]
         self.action_on = S12
@@ -308,6 +309,10 @@ class Brain(object):
                 players[S12]['action'] = key
                 break
 
+        count, points, best_fit, min_val = self.match_template(s6_img, Image.open(self.button_bet_pic))
+        if count >= 1:
+            players[S6]['action_on'] = True
+
         return players
 
 
@@ -434,7 +439,7 @@ class Brain(object):
 
     def do_action(self, info):
         node = self.current_node
-        strategy = node.get_strategy(info['mycard'])
+        strategy = node.get_strategy(self.mycard)
         action = self.get_action_from_strategy(strategy)
 
         print action
@@ -515,6 +520,8 @@ class Brain(object):
                 }
                 self.new_event(Event({'desc' : players[S12]['action']}), snapshot)
 
+            if players[S6]['action_on'] == True
+                self.do_action()
             self.players = players
 
 
