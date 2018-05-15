@@ -296,7 +296,7 @@ class Brain(object):
             if count >= 1:
                 if key == BET:
                     betsize = self.check_betsize(s6_img, S6)
-                    key = key + betsize
+                    key = self.reduce_bet_action(betsize, self.pot)
                 players[S6]['action'] = key
                 break
 
@@ -305,7 +305,7 @@ class Brain(object):
             if count >= 1:
                 if key == BET:
                     betsize = self.check_betsize(s12_img, S12)
-                    key = key + betsize
+                    key = self.reduce_bet_action(betsize, self.pot)
                 players[S12]['action'] = key
                 break
 
@@ -315,6 +315,22 @@ class Brain(object):
 
         return players
 
+    def reduce_bet_action(self, betsize, pot):
+        rate = betsize / pot
+        r = 0 #allin
+        if rate < 0.4 :
+            r = 0.3
+        if rate < 0.6 and rate >= 0.4 :
+            r = 0.5
+        if rate < 0.8 and rate >= 0.6 :
+            r = 0.7
+        if rate >= 0.8 and rate <= 1 :
+            r = 1
+
+        if rate > 1 :
+            r = 1.5
+
+        return r
 
     def check_player_status_ob(self, screenshot):
         self.players = {S12 : {}, S6 : {}}
@@ -520,7 +536,7 @@ class Brain(object):
                 }
                 self.new_event(Event({'desc' : players[S12]['action']}), snapshot)
 
-            if players[S6]['action_on'] == True
+            if players[S6]['action_on'] == True:
                 self.do_action()
             self.players = players
 
