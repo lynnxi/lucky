@@ -31,7 +31,8 @@ class Node(object):
                     '1': 0.125,
                     '1.5': 0.125,
                     '0': 0.125, #allin
-                    'check/call': 0.125,
+                    'check' : 0.125,
+                    'call' : 0.125,
                     'fold' : 0.125,
                 }
 
