@@ -15,6 +15,11 @@ class MongoManager(object):
         self.mongoclient = MongoClient('mongodb://127.0.0.1:27017/lucky')
         self.mongodb = self.mongoclient.lucky
 
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(MongoManager, cls).__new__(cls)
+        return cls.instance
+
     def find(self, param):
         ret = {}
         try:
@@ -25,16 +30,8 @@ class MongoManager(object):
         return ret
 
     def save(self, data):
-        result = self.mongodb.node.insert_one(data)
+        id = self.mongodb.node.save(data)
+        return id
 
-    def update(self, data):
-        try:
-            del data['_id']
-        except:
-            pass
-        ret = self.mongodb.lucky.update_one(
-            {"id": data['id']},
-            {"$set": strategy}
-        )
 
 

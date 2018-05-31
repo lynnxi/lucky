@@ -466,12 +466,11 @@ class Brain(object):
             node = Node()
             node.event = event
             node.data = snapshot
-            nid = node.id
-            self.current_node.sub_nid[event['eventid']] = nid
-        node = Node.find_node(nid)
+            self.current_node.sub_nid[event['eventid']] = node.nid
+
+        node = Node.find(nid)
         self.current_node.save()
         self.current_node = node
-
 
     def start(self):
         i = 0
