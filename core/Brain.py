@@ -461,14 +461,22 @@ class Brain(object):
         print action
 
     def new_event(self, event, snapshot):
-        nid = self.current_node.sub_nid[event['eventid']]
+        if (event.data['desc'] == 'new hand') :
+            nid = ROOT
+        else:
+            nid = self.current_node.sub_nid[event['eventid']]
+
         if nid == None :
             node = Node()
             node.event = event
             node.data = snapshot
             self.current_node.sub_nid[event['eventid']] = node.nid
+        else:
+            node = Node.find(nid)
 
-        node = Node.find(nid)
+        if (event.data['desc'] == 'show down') :
+            node.data['ev'] += snapshot['res']
+
         self.current_node.save()
         self.current_node = node
 
@@ -523,7 +531,7 @@ class Brain(object):
                     'table_cards': self.cards,
                     'players': players,
                     'pot': self.pot,
-                    'round': RIVER
+                    'round': self.current_node.data['round']
                 }
                 self.new_event(Event({'desc' : players[S6]['action']}), snapshot)
             if players[S12]['action'] != None and players[S12]['action'] != self.players[S12]['action']:
@@ -531,13 +539,22 @@ class Brain(object):
                     'table_cards': self.cards,
                     'players': players,
                     'pot': self.pot,
-                    'round': RIVER
+                    'round': self.current_node.data['round']
                 }
                 self.new_event(Event({'desc' : players[S12]['action']}), snapshot)
 
             if players[S6]['action_on'] == True:
                 self.do_action()
             self.players = players
+
+            if self.current_node.data['round'] == RIVER:
+                res = self.check_win()
+                snapshot = {
+                    'ev': res,
+                    'round': 'show down'
+                }
+                self.new_event(Event({'desc': 'show down'}), snapshot)
+
 
 
 
